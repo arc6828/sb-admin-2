@@ -20,6 +20,52 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNHx-75dpbZkgJcUfcNvVJWIi0bUHT9eI",
+            authDomain: "lineoa-b2204.firebaseapp.com",
+            projectId: "lineoa-b2204",
+            storageBucket: "lineoa-b2204.appspot.com",
+            messagingSenderId: "142956788207",
+            appId: "1:142956788207:web:bfb8360d090bcc3a901e1a",
+            measurementId: "G-C4KP0MP1X7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+        const auth = getAuth();
+        //WHEN THE BUTTON REGISTER IS CLICKED
+        document.querySelector('#btn-login').addEventListener('click', function () {
+            console.log("You try to login !!!");
+            let email = document.querySelector('#exampleInputEmail').value;
+            let password = document.querySelector('#exampleInputPassword').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log("Success : ", user);
+                    window.location.replace("tables.html");
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert("Wrong Username / Password !!!");
+                });
+        })
+    </script>
+
 </head>
 
 <body class="bg-gradient-primary">
@@ -45,11 +91,11 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Enter Email Address..." required>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="exampleInputPassword" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -58,9 +104,12 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <!-- <a href="index.html" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </a> -->
+                                        <button type="button" class="btn btn-primary btn-user btn-block" id="btn-login">
+                                            Login
+                                        </button>
                                         <hr>
                                         <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
