@@ -43,8 +43,21 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
     </script>
+
     <script type="module">
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+        // import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            signInWithPopup,
+            signInWithRedirect,
+            getRedirectResult,
+            GoogleAuthProvider,
+            FacebookAuthProvider,
+        } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+        const googleProvider = new GoogleAuthProvider();
+        const facebookProvider = new FacebookAuthProvider();
+
         const auth = getAuth();
         //WHEN THE BUTTON REGISTER IS CLICKED
         document.querySelector('#btn-login').addEventListener('click', function () {
@@ -63,7 +76,112 @@
                     const errorMessage = error.message;
                     alert("Wrong Username / Password !!!");
                 });
-        })
+        });
+
+        //WHEN THE BUTTON REGISTER GOOGLE IS CLICKED
+        document.querySelector('#btn-login-google').addEventListener('click', function () {
+            console.log("You try to login Google !!!");
+            signInWithPopup(auth, googleProvider)
+                .then((result) => {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    // The signed-in user info.
+                    const user = result.user;
+                    console.log("Success : ", user);
+                    window.location.replace("tables.html");
+                    // ...
+                }).catch((error) => {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // The email of the user's account used.
+                    const email = error.email;
+                    // The AuthCredential type that was used.
+                    const credential = GoogleAuthProvider.credentialFromError(error);
+                    // ...
+                });
+        });
+        //WHEN THE BUTTON REGISTER GOOGLE REDIRECT IS CLICKED
+        document.querySelector('#btn-login-google-redirect').addEventListener('click', function () {
+            console.log("You try to login Google Redirect !!!");
+            signInWithRedirect(auth, googleProvider);
+        });
+        getRedirectResult(auth)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access Google APIs.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+
+                // The signed-in user info.
+                const user = result.user;
+                console.log("Success : ", user);
+
+                window.location.replace("tables.html");
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                // ...
+            });
+
+        //WHEN THE BUTTON REGISTER FACEBOOK IS CLICKED
+        document.querySelector('#btn-login-facebook').addEventListener('click', function () {
+            console.log("You try to login Facebook !!!");
+            signInWithPopup(auth, facebookProvider)
+                .then((result) => {
+                    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                    const credential = FacebookAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    // The signed-in user info.
+                    const user = result.user;
+                    console.log("Success : ", user);
+                    window.location.replace("tables.html");
+                    // ...
+                }).catch((error) => {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // The email of the user's account used.
+                    const email = error.email;
+                    // The AuthCredential type that was used.
+                    const credential = FacebookAuthProvider.credentialFromError(error);
+                    console.log(error);
+                    // ...
+                });
+        });
+        // //WHEN THE BUTTON REGISTER FACEBOOK REDIRECT IS CLICKED
+        // document.querySelector('#btn-login-facebook-redirect').addEventListener('click', function () {
+        //     console.log("You try to login Facebook Redirect !!!");
+        //     signInWithRedirect(auth, facebookProvider);
+        // });
+        // getRedirectResult(auth)
+        //     .then((result) => {
+        //         // This gives you a Google Access Token. You can use it to access Google APIs.
+        //         const credential = FacebookAuthProvider.credentialFromResult(result);
+        //         const token = credential.accessToken;
+
+        //         // The signed-in user info.
+        //         const user = result.user;
+        //         console.log("Success : ", user);
+
+        //         // window.location.replace("tables.html");
+        //     }).catch((error) => {
+        //         // Handle Errors here.
+        //         const errorCode = error.code;
+        //         const errorMessage = error.message;
+        //         // The email of the user's account used.
+        //         const email = error.email;
+        //         // The AuthCredential type that was used.
+        //         const credential = FacebookAuthProvider.credentialFromError(error);
+        //         // ...
+        //     });
+        
+
     </script>
 
 </head>
@@ -111,12 +229,24 @@
                                             Login
                                         </button>
                                         <hr>
-                                        <a href="index.html" class="btn btn-google btn-user btn-block">
+                                        <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
                                         </a>
                                         <a href="index.html" class="btn btn-facebook btn-user btn-block">
                                             <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a>
+                                        </a> -->
+                                        <button type="button" class="btn btn-google btn-user btn-block"
+                                            id="btn-login-google">
+                                            <i class="fab fa-google fa-fw"></i> Login with Google
+                                        </button>
+                                        <button type="button" class="btn btn-google btn-user btn-block"
+                                            id="btn-login-google-redirect">
+                                            <i class="fab fa-google fa-fw"></i> Login with Google Redirect
+                                        </button>
+                                        <button type="button" class="btn btn-facebook btn-user btn-block"
+                                            id="btn-login-facebook">
+                                            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                                        </button>
                                     </form>
                                     <hr>
                                     <div class="text-center">
